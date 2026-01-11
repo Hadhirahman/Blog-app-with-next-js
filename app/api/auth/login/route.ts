@@ -15,7 +15,13 @@ export async function POST(req: Request) {
 
   const token = signToken({ id: user._id, role: user.role });
 
-  (await cookies()).set("token", token, { httpOnly: true, path: "/" });
+  (await cookies()).set("token", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+});
+
 
   return Response.json({ message: "Logged in" });
 }
