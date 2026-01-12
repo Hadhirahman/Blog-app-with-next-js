@@ -1,11 +1,40 @@
 import Link from "next/link";
 import { apiFetch } from "@/lib/apiFetch";
-export default async function Home() {
-  const res = await apiFetch(`${process.env.API_URL}/api/posts`, {
-    cache: "no-store",
-  });
+import { formatDate } from "@/lib/formatDate";
 
-  const posts = await res.json();
+export default async function Home() {
+  let posts: any[] = [];
+
+  try {
+    const res = await apiFetch(`${process.env.API_URL}/api/posts`, {
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Failed to load posts");
+    }
+
+    posts = await res.json();
+  } catch (err: any) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="alert alert-error shadow">
+          <span>{err.message || "Unable to load blog posts"}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!posts.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="alert alert-info">
+          <span>No posts published yet.</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-900 py-24 sm:py-32">

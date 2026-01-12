@@ -3,7 +3,7 @@ export async function apiFetch(
   options: RequestInit = {}
 ) {
   const res = await fetch(url, {
-    credentials: "include", // send cookies (JWT)
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...options.headers,

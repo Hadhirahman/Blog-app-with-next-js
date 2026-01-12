@@ -62,9 +62,7 @@ export default async function Header() {
     </li>
   ) : (
     <>
-      <li className="menu-title">
-        <span>{user.name}</span>
-      </li>
+      
 
       <li>
         <Link href="/posts/create">Create Post</Link>
